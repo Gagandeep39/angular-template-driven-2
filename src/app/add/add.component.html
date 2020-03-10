@@ -1,0 +1,90 @@
+<h2 class="display-4">Add Product</h2>
+<form (ngSubmit)="form.submitted && addProduct()" #form="ngForm">
+
+  <!-- ID  -->
+  <div class="form-group">
+    <label for="pid">Product ID</label>
+    <input type="number" name="pid" #productid="ngModel" [(ngModel)]="product.id" class="form-control"
+      [ngClass]="{'is-invalid': form.submitted && productid.invalid}" placeholder="Enter Product ID" required
+      pattern="[0-9]{3,}">
+    <div class="invalid-feedback" *ngIf="form.submitted && productid.invalid">
+      <div *ngIf="productid.errors.required">Field Cannot be Empty</div>
+      <div *ngIf="productid.errors.pattern">3+ digits are required</div>
+    </div>
+  </div>
+  <!-- name  -->
+  <div class="form-group">
+    <label for="pname">Product Name</label>
+    <input type="text" name="pname" class="form-control"
+      [ngClass]="{'is-invalid': form.submitted && productname.invalid}" placeholder="Enter Product Name"
+      [(ngModel)]="product.name" #productname="ngModel" required pattern="[A-Za-z]*" minlength="4">
+    <div class="invalid-feedback" *ngIf="form.submitted && productname.invalid">
+      <div *ngIf="productname.errors.required">Field Cannot be Empty</div>
+      <div *ngIf="productname.errors.minlength">Must have atleast 4 characters</div>
+      <div *ngIf="productname.errors.pattern">Can only contain Alphabets</div>
+    </div>
+  </div>
+  <!-- cost  -->
+  <div class="form-group">
+    <label for="pcost">Product Cost</label>
+    <input type="number" name="pcost" class="form-control" placeholder="Enter Product Cost"
+      [ngClass]="{'is-invalid': form.submitted && productcost.invalid}" [(ngModel)]="product.cost"
+      #productcost="ngModel" required pattern="[0-9]*" minlength="3">
+    <div class="invalid-feedback" *ngIf="form.submitted && productcost.invalid">
+      <div *ngIf="productcost.errors.required">Field Cannot be empty</div>
+      <div *ngIf="productcost.errors.pattern">Only numbres allowed</div>
+      <div *ngIf="productcost.errors.minlength">Length must be 3+ characters</div>
+    </div>
+  </div>
+  <!-- online  -->
+  <div class="form-group">
+    <label for="ponline">Product Online</label>
+    <div *ngFor="let item of optionsList" class="custom-control custom-radio">
+      <input type="radio" class="custom-control-input"
+        [ngClass]="{'is-invalid': form.submitted && productonline.invalid}" id="{{item}}" name="ponline" value={{item}}
+        [(ngModel)]="product.online" #productonline="ngModel" required>
+      <label class="custom-control-label" for="{{item}}"> {{item}} </label>
+    </div>
+  </div>
+
+  <!-- category  -->
+  <div class="form-group">
+    <label for="pcat">Product Category</label>
+    <select name="pcat" class="form-control" [ngClass]="{'is-invalid': form.submitted && productcategory.invalid}"
+      required [(ngModel)]="product.category" #productcategory="ngModel">
+      <option value="">Select an Option</option>
+      <option *ngFor="let item of categoryList" value="{{item}}"> {{item}} </option>
+    </select>
+    <div *ngIf="form.submitted && productcategory.invalid" class="invalid-feedback">Select A category</div>
+  </div>
+
+  <!-- instore  -->
+  <div class="form-group">
+    <label for="pstore">Product Store</label>
+    <div *ngFor="let item of storeList" class="custom-control custom-checkbox">
+      <input [ngClass]="{'is-invalid': form.submitted && productstore.invalid}" #productstore="ngModel" required
+        class="custom-control-input" type="checkbox" id="{{item.item}}" name="pstore" [(ngModel)]="item.checked">
+      <label class="custom-control-label" for="{{item.item}}"> {{item.item}} </label>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+
+
+
+  <div *ngIf="form.submitted && form.valid">
+
+    {{product.id}}
+    {{product.name}}
+    {{product.cost}}
+    {{product.online}}
+    {{product.inStores}}
+  </div>
+</form>
+
+
+<!-- id and labl referring to id is required for 'custom-control' radio button  -->
+<!-- custom-control = for builsh volor radio ,custom-radio =curcular shape -->
+<!-- Name for all radio buttons must be same for validation to work  -->
+<!-- Name of All check boxes should be same to add one common validation for a  grou[] -->
+<!-- Dont forget #xyz="ngModel" at all -->
